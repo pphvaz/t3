@@ -6,10 +6,24 @@ type props = {
     seletorView: Function
 }
 
-export default class BarraNavegacao extends Component<props>{
+type State = {
+    menuAberto: boolean
+}
+
+export default class BarraNavegacao extends Component<props, State> {
     constructor(props: props | Readonly<props>) {
         super(props)
+        this.state = {
+            menuAberto: false
+        }
         this.gerarListaBotoes = this.gerarListaBotoes.bind(this)
+        this.toggleMenu = this.toggleMenu.bind(this)
+    }
+
+    toggleMenu() {
+        this.setState(prevState => ({
+            menuAberto: !prevState.menuAberto
+        }))
     }
 
     gerarListaBotoes() {
@@ -60,10 +74,11 @@ export default class BarraNavegacao extends Component<props>{
                             <button 
                                 className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                                 type="button"
+                                onClick={this.toggleMenu}
                                 aria-controls="mobile-menu"
-                                aria-expanded="false"
+                                aria-expanded={this.state.menuAberto}
                             >
-                                <span className="sr-only">Open main menu</span>
+                                <span className="sr-only">Abrir menu</span>
                                 <svg 
                                     className="block h-6 w-6" 
                                     xmlns="http://www.w3.org/2000/svg" 
@@ -81,6 +96,17 @@ export default class BarraNavegacao extends Component<props>{
                                 </svg>
                             </button>
                         </div> 
+                    </div>
+                </div>
+
+                {/* Menu Mobile */}
+                <div className={`md:hidden ${this.state.menuAberto ? 'block' : 'hidden'}`} id="mobile-menu">
+                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-900">
+                        {this.gerarListaBotoes().map((item, index) => (
+                            <div key={index} className="relative">
+                                {item}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </nav>
