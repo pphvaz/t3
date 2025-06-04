@@ -10,6 +10,7 @@ import ListaServicos from "./listaServicos";
 import FormularioCadastroServico from "./formularioCadastroServico";
 import FormularioCadastroConsumo from "./formularioCadastroConsumo";
 import ListaConsumos from "./listaConsumos";
+import Relatorios from "./relatorios";
 import { Cliente } from "../types/cliente";
 import { Pet } from "../types/pet";
 import { Produto } from "../types/produto";
@@ -182,6 +183,13 @@ export default class Roteador extends Component<{}, State> {
                 <>
                     {barraNavegacao}
                     <FormularioCadastroConsumo tema="purple" onSubmit={this.handleConsumoSubmit} />
+                </>
+            );
+        } else if (this.state.tela === "Relatorios-Relatorios") {
+            return (
+                <>
+                    {barraNavegacao}
+                    <Relatorios tema="purple" />
                 </>
             );
         } else {

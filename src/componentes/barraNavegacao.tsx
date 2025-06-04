@@ -19,12 +19,7 @@ export default class BarraNavegacao extends Component<props>{
             { nome: "Produtos", submenu: ["Listar", "Cadastrar"] },
             { nome: "Servicos", submenu: ["Listar", "Cadastrar"] },
             { nome: "Consumos", submenu: ["Registrar", "Listar"] },
-            { nome: "Relatórios", submenu: [
-                "Top 10 Clientes (Qtd)",
-                "Top Produtos/Serviços",
-                "Consumo por Pet",
-                "Top 5 Clientes (Valor)"
-            ]}
+            { nome: "Relatorios", submenu: ["Relatorios"]}
         ]
 
         return botoes.map((grupo, index) => (
