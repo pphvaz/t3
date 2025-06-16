@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { useState } from "react";
 import BarraNavegacao from "./barraNavegacao";
 import ListaCliente from "./listaClientes";
 import FormularioCadastroCliente from "./formularioCadastroCliente";
@@ -17,191 +17,160 @@ import { Produto } from "../types/produto";
 import { Servico } from "../types/servico";
 import { Consumo } from "../types/consumo";
 
-type State = {
-    tela: string;
-    cliente?: Cliente;
-    pet?: Pet;
-    produto?: Produto;
-    servico?: Servico;
-}
+export default function Roteador() {
+    const [tela, setTela] = useState("Clientes-Listar");
+    const [cliente, setCliente] = useState<Cliente | undefined>(undefined);
+    const [pet, setPet] = useState<Pet | undefined>(undefined);
+    const [produto, setProduto] = useState<Produto | undefined>(undefined);
+    const [servico, setServico] = useState<Servico | undefined>(undefined);
 
-export default class Roteador extends Component<{}, State> {
-    constructor(props: {}) {
-        super(props);
-        this.state = {
-            tela: "Clientes-Listar"
-        };
-        this.selecionarView = this.selecionarView.bind(this);
-        this.handleClienteSubmit = this.handleClienteSubmit.bind(this);
-        this.handlePetSubmit = this.handlePetSubmit.bind(this);
-        this.handleProdutoSubmit = this.handleProdutoSubmit.bind(this);
-        this.handleServicoSubmit = this.handleServicoSubmit.bind(this);
-        this.handleConsumoSubmit = this.handleConsumoSubmit.bind(this);
-        this.handleEditarCliente = this.handleEditarCliente.bind(this);
-        this.handleEditarPet = this.handleEditarPet.bind(this);
-        this.handleEditarProduto = this.handleEditarProduto.bind(this);
-        this.handleEditarServico = this.handleEditarServico.bind(this);
-    }
-
-    selecionarView(novaTela: string, evento?: React.MouseEvent) {
+    const selecionarView = (novaTela: string, evento?: React.MouseEvent) => {
         if (evento) {
             evento.preventDefault();
         }
-        this.setState({
-            tela: novaTela,
-            cliente: undefined,
-            pet: undefined,
-            produto: undefined,
-            servico: undefined
-        });
+        setTela(novaTela);
+        setCliente(undefined);
+        setPet(undefined);
+        setProduto(undefined);
+        setServico(undefined);
     }
 
-    handleClienteSubmit(cliente: Cliente) {
+    const handleClienteSubmit = (cliente: Cliente) => {
         // Aqui você implementará a lógica para salvar o cliente
         console.log("Cliente salvo:", cliente);
-        this.selecionarView("Clientes-Listar");
+        selecionarView("Clientes-Listar");
     }
 
-    handlePetSubmit(pet: Pet) {
+    const handlePetSubmit = (pet: Pet) => {
         // Aqui você implementará a lógica para salvar o pet
         console.log("Pet salvo:", pet);
-        this.selecionarView("Pets-Listar");
+        selecionarView("Pets-Listar");
     }
 
-    handleProdutoSubmit(produto: Produto) {
+    const handleProdutoSubmit = (produto: Produto) => {
         // Aqui você implementará a lógica para salvar o produto
         console.log("Produto salvo:", produto);
-        this.selecionarView("Produtos-Listar");
+        selecionarView("Produtos-Listar");
     }
 
-    handleServicoSubmit(servico: Servico) {
+    const handleServicoSubmit = (servico: Servico) => {
         console.log("Serviço salvo:", servico);
-        this.selecionarView("Servicos-Listar");
+        selecionarView("Servicos-Listar");
     }
 
-    handleConsumoSubmit(consumo: Consumo) {
+    const handleConsumoSubmit = (consumo: Consumo) => {
         console.log("Consumo registrado:", consumo);
-        this.selecionarView("Consumos-Listar");
+        selecionarView("Consumos-Listar");
     }
 
-    handleEditarCliente(cliente: Cliente) {
-        this.setState({
-            tela: "Clientes-Cadastrar",
-            cliente: cliente
-        });
+    const handleEditarCliente = (cliente: Cliente) => {
+        setTela("Clientes-Cadastrar");
+        setCliente(cliente);
     }
 
-    handleEditarPet(pet: Pet) {
-        this.setState({
-            tela: "Pets-Cadastrar",
-            pet: pet
-        });
+    const handleEditarPet = (pet: Pet) => {
+        setTela("Pets-Cadastrar");
+        setPet(pet);
     }
 
-    handleEditarProduto(produto: Produto) {
-        this.setState({
-            tela: "Produtos-Cadastrar",
-            produto: produto
-        });
+    const handleEditarProduto = (produto: Produto) => {
+        setTela("Produtos-Cadastrar");
+        setProduto(produto);
     }
 
-    handleEditarServico(servico: Servico) {
-        this.setState({
-            tela: "Servicos-Cadastrar",
-            servico: servico
-        });
+    const handleEditarServico = (servico: Servico) => {
+        setTela("Servicos-Cadastrar");
+        setServico(servico);
     }
 
-    render() {
-        let barraNavegacao = <BarraNavegacao tema="purple" seletorView={this.selecionarView} />;
+    const barraNavegacao = <BarraNavegacao tema="purple" seletorView={selecionarView} />;
 
-        if (this.state.tela === "Clientes-Listar") {
-            return (
-                <>
-                    {barraNavegacao}
-                    <ListaCliente tema="purple" onEditarCliente={this.handleEditarCliente} />
-                </>
-            );
-        } else if (this.state.tela === "Clientes-Cadastrar") {
-            return (
-                <>
-                    {barraNavegacao}
-                    <FormularioCadastroCliente tema="purple" cliente={this.state.cliente} onSubmit={this.handleClienteSubmit} />
-                </>
-            );
-        } else if (this.state.tela === "Pets-Listar") {
-            return (
-                <>
-                    {barraNavegacao}
-                    <ListaPets tema="purple" onEditarPet={this.handleEditarPet} />
-                </>
-            );
-        } else if (this.state.tela === "Pets-Cadastrar") {
-            return (
-                <>
-                    {barraNavegacao}
-                    <FormularioCadastroPet tema="purple" pet={this.state.pet} onSubmit={this.handlePetSubmit} />
-                </>
-            );
-        } else if (this.state.tela === "Produtos-Listar") {
-            return (
-                <>
-                    {barraNavegacao}
-                    <ListaProdutos tema="purple" onEditarProduto={this.handleEditarProduto} />
-                </>
-            );
-        } else if (this.state.tela === "Produtos-Cadastrar") {
-            return (
-                <>
-                    {barraNavegacao}
-                    <FormularioCadastroProduto tema="purple" produto={this.state.produto} onSubmit={this.handleProdutoSubmit} />
-                </>
-            );
-        } else if (this.state.tela === "Servicos-Listar") {
-            return (
-                <>
-                    {barraNavegacao}
-                    <ListaServicos tema="purple" onEditarServico={this.handleEditarServico} />
-                </>
-            );
-        } else if (this.state.tela === "Servicos-Cadastrar") {
-            return (
-                <>
-                    {barraNavegacao}
-                    <FormularioCadastroServico tema="purple" servico={this.state.servico} onSubmit={this.handleServicoSubmit} />
-                </>
-            );
-        } else if (this.state.tela === "Consumos-Listar") {
-            return (
-                <>
-                    {barraNavegacao}
-                    <ListaConsumos tema="purple" />
-                </>
-            );
-        } else if (this.state.tela === "Consumos-Registrar") {
-            return (
-                <>
-                    {barraNavegacao}
-                    <FormularioCadastroConsumo tema="purple" onSubmit={this.handleConsumoSubmit} />
-                </>
-            );
-        } else if (this.state.tela === "Relatorios-Relatorios") {
-            return (
-                <>
-                    {barraNavegacao}
-                    <Relatorios tema="purple" />
-                </>
-            );
-        } else {
-            return (
-                <>
-                    {barraNavegacao}
-                    <div className="container mx-auto px-4">
-                        <h2 className="text-2xl font-bold mb-4">Página em desenvolvimento</h2>
-                        <p>Esta funcionalidade está sendo implementada.</p>
-                    </div>
-                </>
-            );
-        }
+    if (tela === "Clientes-Listar") {
+        return (
+            <>
+                {barraNavegacao}
+                <ListaCliente tema="purple" onEditarCliente={handleEditarCliente} />
+            </>
+        );
+    } else if (tela === "Clientes-Cadastrar") {
+        return (
+            <>
+                {barraNavegacao}
+                <FormularioCadastroCliente tema="purple" cliente={cliente} onSubmit={handleClienteSubmit} />
+            </>
+        );
+    } else if (tela === "Pets-Listar") {
+        return (
+            <>
+                {barraNavegacao}
+                <ListaPets tema="purple" onEditarPet={handleEditarPet} />
+            </>
+        );
+    } else if (tela === "Pets-Cadastrar") {
+        return (
+            <>
+                {barraNavegacao}
+                <FormularioCadastroPet tema="purple" pet={pet} onSubmit={handlePetSubmit} />
+            </>
+        );
+    } else if (tela === "Produtos-Listar") {
+        return (
+            <>
+                {barraNavegacao}
+                <ListaProdutos tema="purple" onEditarProduto={handleEditarProduto} />
+            </>
+        );
+    } else if (tela === "Produtos-Cadastrar") {
+        return (
+            <>
+                {barraNavegacao}
+                <FormularioCadastroProduto tema="purple" produto={produto} onSubmit={handleProdutoSubmit} />
+            </>
+        );
+    } else if (tela === "Servicos-Listar") {
+        return (
+            <>
+                {barraNavegacao}
+                <ListaServicos tema="purple" onEditarServico={handleEditarServico} />
+            </>
+        );
+    } else if (tela === "Servicos-Cadastrar") {
+        return (
+            <>
+                {barraNavegacao}
+                <FormularioCadastroServico tema="purple" servico={servico} onSubmit={handleServicoSubmit} />
+            </>
+        );
+    } else if (tela === "Consumos-Listar") {
+        return (
+            <>
+                {barraNavegacao}
+                <ListaConsumos tema="purple" />
+            </>
+        );
+    } else if (tela === "Consumos-Registrar") {
+        return (
+            <>
+                {barraNavegacao}
+                <FormularioCadastroConsumo tema="purple" onSubmit={handleConsumoSubmit} />
+            </>
+        );
+    } else if (tela === "Relatorios-Relatorios") {
+        return (
+            <>
+                {barraNavegacao}
+                <Relatorios tema="purple" />
+            </>
+        );
+    } else {
+        return (
+            <>
+                {barraNavegacao}
+                <div className="container mx-auto px-4">
+                    <h2 className="text-2xl font-bold mb-4">Página em desenvolvimento</h2>
+                    <p>Esta funcionalidade está sendo implementada.</p>
+                </div>
+            </>
+        );
     }
 }
